@@ -6,37 +6,117 @@
   <title>Personal Web Browser</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
+      font-family: 'San Francisco', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
       margin: 0;
       padding: 0;
+      background-color: #F5F5F7;
     }
+
     .navbar {
       display: flex;
       align-items: center;
-      background-color: #f1f1f1;
-      padding: 10px;
+      background-color: #E5E5EA;
+      padding: 8px;
+      border-bottom: 1px solid #C7C7CC;
     }
+
     .navbar button {
       margin-right: 10px;
+      border: none;
+      background-color: #E5E5EA;
+      border-radius: 50%;
+      width: 30px;
+      height: 30px;
+      cursor: pointer;
+      outline: none;
+      transition: background-color 0.2s ease;
     }
+
+    .navbar button:hover {
+      background-color: #D1D1D6;
+    }
+
     .url-bar {
       flex-grow: 1;
-      height: 30px;
-      border-radius: 5px;
-      border: 1px solid #ccc;
+      height: 28px;
+      border-radius: 8px;
+      border: 1px solid #D1D1D6;
       padding-left: 10px;
+      background-color: #FFFFFF;
+      outline: none;
+      font-size: 14px;
     }
+
     .webview-container {
       width: 100%;
       height: calc(100vh - 50px);
     }
+
     webview {
       width: 100%;
       height: 100%;
+      border: none;
+    }
+
+    .titlebar {
+      display: flex;
+      align-items: center;
+      height: 32px;
+      -webkit-app-region: drag; /* Allow dragging of the window */
+      background-color: #E5E5EA;
+      padding-left: 12px;
+    }
+
+    .window-controls {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .window-controls button {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      border: none;
+      cursor: pointer;
+      outline: none;
+      -webkit-app-region: no-drag; /* Make buttons clickable */
+    }
+
+    .close-btn {
+      background-color: #FF5F57;
+    }
+
+    .close-btn:hover {
+      background-color: #FF1E1C;
+    }
+
+    .minimize-btn {
+      background-color: #FFBD2E;
+    }
+
+    .minimize-btn:hover {
+      background-color: #F6B70B;
+    }
+
+    .maximize-btn {
+      background-color: #28C840;
+    }
+
+    .maximize-btn:hover {
+      background-color: #24A835;
     }
   </style>
 </head>
 <body>
+  <div class="titlebar">
+    <div class="window-controls">
+      <button class="close-btn" onclick="window.electronAPI.closeWindow()"></button>
+      <button class="minimize-btn" onclick="window.electronAPI.minimizeWindow()"></button>
+      <button class="maximize-btn" onclick="window.electronAPI.toggleMaximizeWindow()"></button>
+    </div>
+  </div>
+
   <div class="navbar">
     <button onclick="goBack()">Back</button>
     <button onclick="goForward()">Forward</button>
@@ -61,7 +141,7 @@
     // Load the entered URL or perform a search
     function navigateToUrl() {
       let url = urlInput.value.trim();
-      
+
       // Regex to check if it's a valid URL format (e.g., youtube.com)
       const urlPattern = /^(https?:\/\/)?(([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,})(\/.*)?$/;
 
@@ -98,6 +178,14 @@
     function goHome() {
       webview.loadURL('https://google.com');
     }
+
+    // Add event listener for Enter key in the URL input field
+    urlInput.addEventListener('keypress', (event) => {
+      if (event.key === 'Enter') {
+        event.preventDefault(); // Prevent the default action (e.g., form submission)
+        navigateToUrl(); // Call the function to handle the URL input
+      }
+    });
   </script>
 </body>
 </html>
