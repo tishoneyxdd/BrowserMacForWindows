@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Personal Web Browser</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+    .navbar {
+      display: flex;
+      align-items: center;
+      background-color: #f1f1f1;
+      padding: 10px;
+    }
+    .navbar button {
+      margin-right: 10px;
+    }
+    .url-bar {
+      flex-grow: 1;
+      height: 30px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      padding-left: 10px;
+    }
+    .webview-container {
+      width: 100%;
+      height: calc(100vh - 50px);
+    }
+    webview {
+      width: 100%;
+      height: 100%;
+    }
+  </style>
+</head>
+<body>
+  <div class="navbar">
+    <button onclick="goBack()">Back</button>
+    <button onclick="goForward()">Forward</button>
+    <button onclick="reloadPage()">Reload</button>
+    <button onclick="goHome()">Home</button>
+    <input type="text" class="url-bar" id="url" placeholder="Enter URL or search query" />
+    <button onclick="navigateToUrl()">Go</button>
+  </div>
+  <div class="webview-container">
+    <webview id="browser" src="https://google.com" style="display:inline-flex;"></webview>
+  </div>
+
+  <script>
+    const webview = document.getElementById('browser');
+    const urlInput = document.getElementById('url');
+
+    // Update URL bar when the webview's URL changes
+    webview.addEventListener('did-navigate', () => {
+      urlInput.value = webview.getURL();
+    });
+
+    // Load the entered URL or perform a search
+    function navigateToUrl() {
+      let url = urlInput.value.trim();
+      
+      // Regex to check if it's a valid URL format (e.g., youtube.com)
+      const urlPattern = /^(https?:\/\/)?(([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,})(\/.*)?$/;
+
+      if (urlPattern.test(url)) {
+        // If it's a valid URL, ensure it has the http/https protocol
+        if (!url.startsWith('http://') && !url.startsWith('https://')) {
+          url = 'http://' + url;
+        }
+      } else {
+        // If it's not a valid URL, treat it as a search query
+        url = 'https://www.google.com/search?q=' + encodeURIComponent(url);
+      }
+
+      webview.loadURL(url);
+    }
+
+    // Navigation functions
+    function goBack() {
+      if (webview.canGoBack()) {
+        webview.goBack();
+      }
+    }
+
+    function goForward() {
+      if (webview.canGoForward()) {
+        webview.goForward();
+      }
+    }
+
+    function reloadPage() {
+      webview.reload();
+    }
+
+    function goHome() {
+      webview.loadURL('https://google.com');
+    }
+  </script>
+</body>
+</html>
