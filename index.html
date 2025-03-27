@@ -3,74 +3,38 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Personal Web Browser</title>
+  <title>Safari for Windows</title>
   <style>
+    :root {
+      --safari-blue: #007AFF;
+      --safari-gray: #F5F5F7;
+      --safari-border: #D1D1D6;
+      --safari-text: #1D1D1F;
+    }
+
     body {
-      font-family: 'San Francisco', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
       margin: 0;
       padding: 0;
-      background-color: #F5F5F7;
-    }
-
-    .navbar {
-      display: flex;
-      align-items: center;
-      background-color: #E5E5EA;
-      padding: 8px;
-      border-bottom: 1px solid #C7C7CC;
-    }
-
-    .navbar button {
-      margin-right: 10px;
-      border: none;
-      background-color: #E5E5EA;
-      border-radius: 50%;
-      width: 30px;
-      height: 30px;
-      cursor: pointer;
-      outline: none;
-      transition: background-color 0.2s ease;
-    }
-
-    .navbar button:hover {
-      background-color: #D1D1D6;
-    }
-
-    .url-bar {
-      flex-grow: 1;
-      height: 28px;
-      border-radius: 8px;
-      border: 1px solid #D1D1D6;
-      padding-left: 10px;
-      background-color: #FFFFFF;
-      outline: none;
-      font-size: 14px;
-    }
-
-    .webview-container {
-      width: 100%;
-      height: calc(100vh - 50px);
-    }
-
-    webview {
-      width: 100%;
-      height: 100%;
-      border: none;
+      background-color: var(--safari-gray);
+      color: var(--safari-text);
     }
 
     .titlebar {
       display: flex;
       align-items: center;
       height: 32px;
-      -webkit-app-region: drag; /* Allow dragging of the window */
-      background-color: #E5E5EA;
+      -webkit-app-region: drag;
+      background-color: var(--safari-gray);
       padding-left: 12px;
+      border-bottom: 1px solid var(--safari-border);
     }
 
     .window-controls {
       display: flex;
       align-items: center;
       gap: 8px;
+      margin-right: 12px;
     }
 
     .window-controls button {
@@ -80,31 +44,192 @@
       border: none;
       cursor: pointer;
       outline: none;
-      -webkit-app-region: no-drag; /* Make buttons clickable */
+      -webkit-app-region: no-drag;
     }
 
-    .close-btn {
-      background-color: #FF5F57;
+    .close-btn { background-color: #FF5F57; }
+    .close-btn:hover { background-color: #FF1E1C; }
+    .minimize-btn { background-color: #FFBD2E; }
+    .minimize-btn:hover { background-color: #F6B70B; }
+    .maximize-btn { background-color: #28C840; }
+    .maximize-btn:hover { background-color: #24A835; }
+
+    .navbar {
+      display: flex;
+      align-items: center;
+      background-color: var(--safari-gray);
+      padding: 8px 12px;
+      border-bottom: 1px solid var(--safari-border);
+      gap: 8px;
     }
 
-    .close-btn:hover {
-      background-color: #FF1E1C;
+    .nav-buttons {
+      display: flex;
+      gap: 4px;
     }
 
-    .minimize-btn {
-      background-color: #FFBD2E;
+    .navbar button {
+      margin-right: 4px;
+      border: none;
+      background-color: transparent;
+      border-radius: 50%;
+      width: 32px;
+      height: 32px;
+      cursor: pointer;
+      outline: none;
+      transition: background-color 0.2s ease;
+      background-size: 16px;
+      background-repeat: no-repeat;
+      background-position: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
-    .minimize-btn:hover {
-      background-color: #F6B70B;
+    .navbar button:hover {
+      background-color: rgba(0, 0, 0, 0.1);
     }
 
-    .maximize-btn {
-      background-color: #28C840;
+    .back-btn { background-image: url('icon/left23.png'); }
+    .forward-btn { background-image: url('icon/right.png'); }
+    .reload-btn { background-image: url('icon/refresh.png'); }
+    .home-btn { background-image: url('icon/home2.png'); }
+
+    .url-container {
+      flex-grow: 1;
+      display: flex;
+      align-items: center;
+      background-color: #FFFFFF;
+      border-radius: 8px;
+      border: 1px solid var(--safari-border);
+      padding: 4px 8px;
+      gap: 8px;
     }
 
-    .maximize-btn:hover {
-      background-color: #24A835;
+    .url-bar {
+      flex-grow: 1;
+      border: none;
+      outline: none;
+      font-size: 14px;
+      padding: 4px;
+    }
+
+    .url-bar:focus {
+      outline: none;
+    }
+
+    .security-icon {
+      width: 16px;
+      height: 16px;
+      background-image: url('icon/lock.png');
+      background-size: contain;
+      background-repeat: no-repeat;
+    }
+
+    .webview-container {
+      width: 100%;
+      height: calc(100vh - 90px);
+      position: relative;
+    }
+
+    webview {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    .tabs-container {
+      display: flex;
+      background-color: var(--safari-gray);
+      border-bottom: 1px solid var(--safari-border);
+      padding: 4px 8px;
+      gap: 4px;
+      overflow-x: auto;
+      -webkit-app-region: no-drag;
+    }
+
+    .tab {
+      display: flex;
+      align-items: center;
+      background-color: #FFFFFF;
+      border-radius: 8px;
+      padding: 8px 12px;
+      min-width: 120px;
+      max-width: 200px;
+      gap: 8px;
+      cursor: pointer;
+      border: 1px solid var(--safari-border);
+    }
+
+    .tab.active {
+      background-color: var(--safari-blue);
+      color: white;
+      border-color: var(--safari-blue);
+    }
+
+    .tab-title {
+      flex-grow: 1;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .tab-close {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background-color: transparent;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .tab-close:hover {
+      background-color: rgba(0, 0, 0, 0.1);
+    }
+
+    .new-tab-btn {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background-color: transparent;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      color: var(--safari-text);
+    }
+
+    .new-tab-btn:hover {
+      background-color: rgba(0, 0, 0, 0.1);
+    }
+
+    .loading-bar {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 3px;
+      background-color: var(--safari-blue);
+      width: 0%;
+      transition: width 0.3s ease;
+    }
+
+    .status-bar {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 20px;
+      background-color: var(--safari-gray);
+      border-top: 1px solid var(--safari-border);
+      padding: 0 8px;
+      font-size: 12px;
+      display: flex;
+      align-items: center;
     }
   </style>
 </head>
@@ -118,44 +243,133 @@
   </div>
 
   <div class="navbar">
-    <button onclick="goBack()">Back</button>
-    <button onclick="goForward()">Forward</button>
-    <button onclick="reloadPage()">Reload</button>
-    <button onclick="goHome()">Home</button>
-    <input type="text" class="url-bar" id="url" placeholder="Enter URL or search query" />
-    <button onclick="navigateToUrl()">Go</button>
+    <div class="nav-buttons">
+      <button class="back-btn" onclick="goBack()"></button>
+      <button class="forward-btn" onclick="goForward()"></button>
+      <button class="reload-btn" onclick="reloadPage()"></button>
+      <button class="home-btn" onclick="goHome()"></button>
+    </div>
+    <div class="url-container">
+      <div class="security-icon"></div>
+      <input type="text" class="url-bar" id="url" placeholder="Search or enter website name" />
+    </div>
   </div>
+
+  <div class="tabs-container" id="tabsContainer">
+    <div class="tab active" data-tab-id="1">
+      <span class="tab-title">New Tab</span>
+      <button class="tab-close" onclick="closeTab(1)">×</button>
+    </div>
+    <button class="new-tab-btn" onclick="createNewTab()">+</button>
+  </div>
+
   <div class="webview-container">
+    <div class="loading-bar" id="loadingBar"></div>
     <webview id="browser" src="https://google.com" style="display:inline-flex;"></webview>
+    <div class="status-bar" id="statusBar">Ready</div>
   </div>
 
   <script>
     const webview = document.getElementById('browser');
     const urlInput = document.getElementById('url');
+    const loadingBar = document.getElementById('loadingBar');
+    const statusBar = document.getElementById('statusBar');
+    let currentTabId = 1;
+    let tabs = new Map();
 
-    // Update URL bar when the webview's URL changes
-    webview.addEventListener('did-navigate', () => {
-      urlInput.value = webview.getURL();
+    // Initialize first tab
+    tabs.set(1, {
+      url: 'https://google.com',
+      title: 'New Tab'
     });
 
-    // Load the entered URL or perform a search
-    function navigateToUrl() {
-      let url = urlInput.value.trim();
+    // Update URL bar when the webview's URL changes
+    webview.addEventListener('did-navigate', (event) => {
+      urlInput.value = event.url;
+      updateTabTitle(currentTabId, event.url);
+    });
 
-      // Regex to check if it's a valid URL format (e.g., youtube.com)
-      const urlPattern = /^(https?:\/\/)?(([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,})(\/.*)?$/;
+    // Update loading progress
+    webview.addEventListener('did-start-loading', () => {
+      loadingBar.style.width = '0%';
+      statusBar.textContent = 'Loading...';
+    });
 
-      if (urlPattern.test(url)) {
-        // If it's a valid URL, ensure it has the http/https protocol
-        if (!url.startsWith('http://') && !url.startsWith('https://')) {
-          url = 'http://' + url;
+    webview.addEventListener('did-progress-load', (event) => {
+      loadingBar.style.width = `${event.progress * 100}%`;
+    });
+
+    webview.addEventListener('did-finish-load', () => {
+      loadingBar.style.width = '100%';
+      statusBar.textContent = 'Ready';
+      setTimeout(() => {
+        loadingBar.style.width = '0%';
+      }, 500);
+    });
+
+    // Tab management
+    function createNewTab() {
+      const newTabId = Date.now();
+      const tabElement = document.createElement('div');
+      tabElement.className = 'tab';
+      tabElement.dataset.tabId = newTabId;
+      tabElement.innerHTML = `
+        <span class="tab-title">New Tab</span>
+        <button class="tab-close" onclick="closeTab(${newTabId})">×</button>
+      `;
+      
+      document.getElementById('tabsContainer').insertBefore(
+        tabElement,
+        document.querySelector('.new-tab-btn')
+      );
+
+      tabs.set(newTabId, {
+        url: 'https://google.com',
+        title: 'New Tab'
+      });
+
+      switchToTab(newTabId);
+    }
+
+    function closeTab(tabId) {
+      const tabElement = document.querySelector(`[data-tab-id="${tabId}"]`);
+      if (tabElement) {
+        tabElement.remove();
+        tabs.delete(tabId);
+        
+        if (tabId === currentTabId && tabs.size > 0) {
+          const nextTabId = Array.from(tabs.keys())[0];
+          switchToTab(nextTabId);
         }
-      } else {
-        // If it's not a valid URL, treat it as a search query
-        url = 'https://www.google.com/search?q=' + encodeURIComponent(url);
       }
+    }
 
-      webview.loadURL(url);
+    function switchToTab(tabId) {
+      document.querySelectorAll('.tab').forEach(tab => {
+        tab.classList.remove('active');
+        if (tab.dataset.tabId === tabId.toString()) {
+          tab.classList.add('active');
+        }
+      });
+
+      currentTabId = tabId;
+      const tabData = tabs.get(tabId);
+      if (tabData) {
+        webview.loadURL(tabData.url);
+        urlInput.value = tabData.url;
+      }
+    }
+
+    function updateTabTitle(tabId, url) {
+      const tabData = tabs.get(tabId);
+      if (tabData) {
+        tabData.url = url;
+        tabData.title = new URL(url).hostname;
+        const tabElement = document.querySelector(`[data-tab-id="${tabId}"] .tab-title`);
+        if (tabElement) {
+          tabElement.textContent = tabData.title;
+        }
+      }
     }
 
     // Navigation functions
@@ -179,13 +393,43 @@
       webview.loadURL('https://google.com');
     }
 
-    // Add event listener for Enter key in the URL input field
+    // Load the entered URL or perform a search
+    function navigateToUrl() {
+      let url = urlInput.value.trim();
+      const urlPattern = /^(https?:\/\/)?(([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,})(\/.*)?$/;
+
+      if (urlPattern.test(url)) {
+        if (!url.startsWith('http://') && !url.startsWith('https://')) {
+          url = 'https://' + url;
+        }
+      } else {
+        url = 'https://www.google.com/search?q=' + encodeURIComponent(url);
+      }
+
+      webview.loadURL(url);
+      updateTabTitle(currentTabId, url);
+    }
+
+    // Event listeners
     urlInput.addEventListener('keypress', (event) => {
       if (event.key === 'Enter') {
-        event.preventDefault(); // Prevent the default action (e.g., form submission)
-        navigateToUrl(); // Call the function to handle the URL input
+        event.preventDefault();
+        navigateToUrl();
       }
     });
+
+    // Handle window controls
+    window.electronAPI = {
+      closeWindow: () => {
+        require('electron').ipcRenderer.send('close-window');
+      },
+      minimizeWindow: () => {
+        require('electron').ipcRenderer.send('minimize-window');
+      },
+      toggleMaximizeWindow: () => {
+        require('electron').ipcRenderer.send('maximize-window');
+      }
+    };
   </script>
 </body>
 </html>

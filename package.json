@@ -1,18 +1,33 @@
 {
-  "name": "browserelectron",
+  "name": "safari-windows",
   "version": "1.0.0",
-  "description": "My web Browser",
+  "description": "A Safari-like browser for Windows",
   "main": "main.js",
   "scripts": {
-    "start": "electron ."
+    "start": "electron .",
+    "dev": "set NODE_ENV=development && electron .",
+    "build": "electron-builder"
   },
-  "keywords": [],
+  "keywords": [
+    "browser",
+    "electron",
+    "safari"
+  ],
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "electron": "^32.0.1"
+    "electron": "^32.0.1",
+    "electron-builder": "^24.9.1"
   },
   "dependencies": {
-    "browserelectron": "file:"
+    "electron-store": "^8.1.0"
+  },
+  "build": {
+    "appId": "com.safari.windows",
+    "productName": "Safari for Windows",
+    "win": {
+      "target": "nsis",
+      "icon": "icon/app.ico"
+    }
   }
 }

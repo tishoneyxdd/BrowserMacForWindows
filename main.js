@@ -1,37 +1,30 @@
 const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('path');
 
-let win;
+let mainWindow;
 
 function createWindow() {
-  win = new BrowserWindow({
-    width: 1280,
-    height: 720,
+  mainWindow = new BrowserWindow({
+    width: 1200,
+    height: 800,
     frame: false,
-    titleBarStyle: 'hiddenInset',
     webPreferences: {
-      preload: path.join(__dirname, 'preload.js'),
-      nodeIntegration: false,
-      contextIsolation: true, // Ensure this is true
-      enableRemoteModule: false,
+      nodeIntegration: true,
+      contextIsolation: false,
       webviewTag: true,
-    },
-  });
-
-  win.loadFile('index.html');
-  // Uncomment this line to open DevTools for debugging
-  // win.webContents.openDevTools();
-}
-
-app.whenReady().then(() => {
-  createWindow();
-
-  app.on('activate', () => {
-    if (BrowserWindow.getAllWindows().length === 0) {
-      createWindow();
+      enableRemoteModule: true
     }
   });
-});
+
+  mainWindow.loadFile('index.html');
+
+  // Open DevTools in development
+  if (process.env.NODE_ENV === 'development') {
+    mainWindow.webContents.openDevTools();
+  }
+}
+
+app.whenReady().then(createWindow);
 
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
@@ -39,22 +32,31 @@ app.on('window-all-closed', () => {
   }
 });
 
-// Handle window control actions
-ipcMain.on('window-close', () => {
-  console.log("Window close received");
-  win.close();
+app.on('activate', () => {
+  if (BrowserWindow.getAllWindows().length === 0) {
+    createWindow();
+  }
 });
 
-ipcMain.on('window-minimize', () => {
-  console.log("Window minimize received");
-  win.minimize();
+// IPC handlers for window controls
+ipcMain.on('minimize-window', () => {
+  if (mainWindow) {
+    mainWindow.minimize();
+  }
 });
 
-ipcMain.on('window-toggle-maximize', () => {
-  console.log("Window maximize/restore received");
-  if (win.isMaximized()) {
-    win.unmaximize();
-  } else {
-    win.maximize();
+ipcMain.on('maximize-window', () => {
+  if (mainWindow) {
+    if (mainWindow.isMaximized()) {
+      mainWindow.unmaximize();
+    } else {
+      mainWindow.maximize();
+    }
+  }
+});
+
+ipcMain.on('close-window', () => {
+  if (mainWindow) {
+    mainWindow.close();
   }
 });
