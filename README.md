@@ -66,13 +66,6 @@ A macOS Safari-like browser UI built for Windows using Electron.
   - `win.target: nsis`
   - `icon: icon/app.ico`
 
-## Known issues / notes
-- Ensure no merge conflict markers (`<<<<<<<`, `=======`, `>>>>>>>`) remain in JS/HTML.
-- Browser core is based on Electron `webview` and default session; security options set intentionally (contextIsolation true, nodeIntegration false in prod).
-
-## Portfolio / website content (short startup)
-- “Safari for Windows is a custom Electron browser built with a macOS-inspired interface. It includes full tab control, downloads management, safe IPC via contextBridge, and a downloadable installer build using electron-builder. I implemented cross-process communication and stateful downloads, and designed a UI with Safari-like controls.”
-
 ## Useful file mapping
 - `main.js`: Main process (window lifecycle / downloads / IPC)
 - `preload.js`: Safe renderer API
