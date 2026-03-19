@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Safari for Windows</title>
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <header class="chrome-shell">
+      <div class="titlebar" id="titleBar">
+        <div class="window-controls">
+          <button class="window-dot close" id="closeWindow" title="Close"></button>
+          <button class="window-dot minimize" id="minimizeWindow" title="Minimize"></button>
+          <button class="window-dot maximize" id="maximizeWindow" title="Maximize"></button>
+        </div>
+        <div class="window-title" id="windowTitle">Safari for Windows</div>
+        <div class="title-actions">
+          <button class="ghost-btn" id="historyPanelBtn">History</button>
+          <button class="ghost-btn" id="bookmarksPanelBtn">Bookmarks</button>
+          <button class="ghost-btn" id="downloadsPanelBtn">Downloads</button>
+          <button class="ghost-btn" id="settingsPanelBtn">Settings</button>
+        </div>
+      </div>
+
+      <div class="tab-strip-wrap">
+        <div class="tab-strip" id="tabStrip"></div>
+        <button class="new-tab-btn" id="newTabBtn" title="New tab">+</button>
+      </div>
+
+      <div class="toolbar">
+        <div class="nav-group">
+          <button id="backBtn" class="circle-btn" title="Back"><span class="nav-icon nav-back"></span></button>
+          <button id="forwardBtn" class="circle-btn" title="Forward"><span class="nav-icon nav-forward"></span></button>
+          <button id="reloadBtn" class="circle-btn" title="Reload"><span class="nav-icon nav-reload"></span></button>
+          <button id="homeBtn" class="circle-btn" title="Home"><span class="nav-icon nav-home"></span></button>
+        </div>
+
+        <div class="address-wrap">
+          <span class="security-indicator" id="securityIndicator">&#128274;</span>
+          <input id="addressBar" type="text" autocomplete="off" spellcheck="false" placeholder="Search or enter website name">
+          <button id="bookmarkToggleBtn" class="bookmark-btn" title="Toggle bookmark">&#x2606;</button>
+        </div>
+      </div>
+      <div class="suggestions hidden" id="suggestions"></div>
+    </header>
+
+    <div class="bookmarks-bar" id="bookmarksBar"></div>
+
+    <main class="workspace" id="workspace">
+      <div class="loading-indicator" id="loadingIndicator"></div>
+      <div class="webviews" id="webviews"></div>
+
+      <aside class="side-panel hidden" id="sidePanel">
+        <div class="panel-header">
+          <h2 id="panelTitle">Panel</h2>
+          <button id="closePanelBtn" class="close-panel">&#x2715;</button>
+        </div>
+        <div class="panel-body" id="panelBody"></div>
+      </aside>
+    </main>
+
+    <footer class="statusbar">
+      <span id="statusText">Ready</span>
+      <span id="zoomText">100%</span>
+    </footer>
+  </div>
+
+  <script src="./renderer.js"></script>
+</body>
+</html>
