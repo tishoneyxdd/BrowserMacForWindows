@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 const { app, BrowserWindow, ipcMain, session, shell, dialog } = require('electron');
 const fs = require('fs');
 const path = require('path');
@@ -28,29 +27,11 @@ function createWindow() {
       webviewTag: true,
       sandbox: false,
       spellcheck: true
-=======
-const { app, BrowserWindow, ipcMain } = require('electron');
-const path = require('path');
-
-let mainWindow;
-
-function createWindow() {
-  mainWindow = new BrowserWindow({
-    width: 1200,
-    height: 800,
-    frame: false,
-    webPreferences: {
-      nodeIntegration: true,
-      contextIsolation: false,
-      webviewTag: true,
-      enableRemoteModule: true
->>>>>>> eff8c5ff160415d2a6225178f9110435443f9392
     }
   });
 
   mainWindow.loadFile('index.html');
 
-<<<<<<< HEAD
   if (process.env.NODE_ENV === 'development') {
     mainWindow.webContents.openDevTools({ mode: 'detach' });
   }
@@ -79,7 +60,6 @@ function setupDownloads() {
       if (!update) {
         return;
       }
-
       update.receivedBytes = item.getReceivedBytes();
       update.totalBytes = item.getTotalBytes();
       update.state = item.isPaused() ? 'paused' : 'progressing';
@@ -92,7 +72,6 @@ function setupDownloads() {
       if (!update) {
         return;
       }
-
       update.receivedBytes = item.getReceivedBytes();
       update.totalBytes = item.getTotalBytes();
       update.state = state;
@@ -113,15 +92,6 @@ app.whenReady().then(() => {
     }
   });
 });
-=======
-  // Open DevTools in development
-  if (process.env.NODE_ENV === 'development') {
-    mainWindow.webContents.openDevTools();
-  }
-}
-
-app.whenReady().then(createWindow);
->>>>>>> eff8c5ff160415d2a6225178f9110435443f9392
 
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
@@ -129,30 +99,16 @@ app.on('window-all-closed', () => {
   }
 });
 
-<<<<<<< HEAD
 ipcMain.on('window:minimize', () => {
   if (mainWindow && !mainWindow.isDestroyed()) {
-=======
-app.on('activate', () => {
-  if (BrowserWindow.getAllWindows().length === 0) {
-    createWindow();
-  }
-});
-
-// IPC handlers for window controls
-ipcMain.on('minimize-window', () => {
-  if (mainWindow) {
->>>>>>> eff8c5ff160415d2a6225178f9110435443f9392
     mainWindow.minimize();
   }
 });
 
-<<<<<<< HEAD
 ipcMain.on('window:maximize-toggle', () => {
   if (!mainWindow || mainWindow.isDestroyed()) {
     return;
   }
-
   if (mainWindow.isMaximized()) {
     mainWindow.unmaximize();
   } else {
@@ -184,7 +140,6 @@ ipcMain.handle('downloads:show-in-folder', (_event, downloadId) => {
   if (!download || !download.savePath) {
     return { ok: false, message: 'Download path unavailable.' };
   }
-
   shell.showItemInFolder(download.savePath);
   return { ok: true };
 });
@@ -195,7 +150,6 @@ ipcMain.handle('downloads:clear-finished', () => {
       downloads.delete(id);
     }
   }
-
   return Array.from(downloads.values());
 });
 
@@ -217,39 +171,3 @@ ipcMain.handle('storage:export-json', async (_event, defaultFileName, data) => {
     return { ok: false, message: error.message };
   }
 });
-
-ipcMain.handle('storage:import-json', async () => {
-  const { canceled, filePaths } = await dialog.showOpenDialog({
-    title: 'Import Browser Data',
-    filters: [{ name: 'JSON', extensions: ['json'] }],
-    properties: ['openFile']
-  });
-
-  if (canceled || !filePaths || !filePaths[0]) {
-    return { ok: false, canceled: true };
-  }
-
-  try {
-    const raw = fs.readFileSync(filePaths[0], 'utf8');
-    return { ok: true, path: filePaths[0], data: JSON.parse(raw) };
-  } catch (error) {
-    return { ok: false, message: error.message };
-  }
-});
-=======
-ipcMain.on('maximize-window', () => {
-  if (mainWindow) {
-    if (mainWindow.isMaximized()) {
-      mainWindow.unmaximize();
-    } else {
-      mainWindow.maximize();
-    }
-  }
-});
-
-ipcMain.on('close-window', () => {
-  if (mainWindow) {
-    mainWindow.close();
-  }
-});
->>>>>>> eff8c5ff160415d2a6225178f9110435443f9392
